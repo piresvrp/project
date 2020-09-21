@@ -43,6 +43,38 @@ const Post = require('./models/Post')
 
 	})
 
+	app.get('/editar/:id', function(req, res){
+		Post.findOne({where: {id: req.params.id}}).then(function(dados){
+			res.render('view', {dados: dados})
+			//console.log(dados)
+		})
+	})
+
+	app.post('/update', function(req,res){
+		id = req.body.id
+		Post.update({
+			conteudo: req.body.conteudo,
+			titulo: req.body.titulo
+		},{
+			where:{
+				id: id
+			}
+		}).then(function(){
+			res.send("DADOS ATUALIZADOS")
+		}).catch(function(erro){
+			res.send(erro)
+		})
+	})
+
+
+	app.get('/deletar/:id', function(req, res){
+		Post.destroy({where: {id: req.params.id}}).then(function(){
+			res.send("Postagem deletada com sucesso")
+		}).catch(function(erro){
+			res.send(erro)
+		})
+	})
+
 
 app.listen('8087', function(){
 	console.log("Runnig my Server")
